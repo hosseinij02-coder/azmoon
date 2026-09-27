@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آزمون شبیه‌ساز گزینش اعضای هیأت‌مدیره | صنعت فولاد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12161b;
+    --panel:#1c222a;
+    --panel-2:#242c36;
+    --line:#323b47;
+    --ink:#eceff2;
+    --ink-dim:#93a0ad;
+    --steel:#5c7a99;
+    --amber:#e8871e;
+    --amber-2:#f4b942;
+    --good:#3e8e7e;
+    --bad:#c1440e;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1100px 600px at 85% -10%, #24303c 0%, transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, #241b16 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Vazirmatn',sans-serif;
+    min-height:100vh;
+    line-height:1.75;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:28px 20px 80px;}
+
+  /* ---- header / hero ---- */
+  .hero{
+    position:relative;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:40px 30px;
+    margin-bottom:26px;
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 26px),
+      linear-gradient(180deg,#1a2028,#151a20);
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0 0 auto 0; height:4px;
+    background:linear-gradient(90deg,var(--bad),var(--amber),var(--amber-2));
+  }
+  .eyebrow-plate{
+    display:inline-block;
+    font-size:13px;
+    color:var(--steel);
+    border:1px solid var(--line);
+    background:var(--panel-2);
+    padding:5px 12px;
+    border-radius:3px;
+    margin-bottom:18px;
+  }
+  h1{
+    font-size:30px;
+    font-weight:900;
+    margin:0 0 12px;
+    letter-spacing:0.2px;
+  }
+  .lead{
+    color:var(--ink-dim);
+    font-size:15.5px;
+    max-width:60ch;
+    margin:0 0 26px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px;}
+  .chip{
+    font-size:12.5px;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    color:var(--ink-dim);
+    background:var(--panel);
+  }
+  .meta-row{
+    display:flex;gap:22px;flex-wrap:wrap;
+    margin-bottom:28px;
+    font-size:13.5px;
+    color:var(--ink-dim);
+  }
+  .meta-row b{color:var(--ink);font-weight:700;}
+
+  button.cta{
+    appearance:none;border:none;cursor:pointer;
+    font-family:inherit;font-weight:700;font-size:16px;
+    color:#191008;
+    background:linear-gradient(180deg,var(--amber-2),var(--amber));
+    padding:14px 26px;border-radius:3px;
+    box-shadow:0 6px 18px rgba(232,135,30,0.25);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  button.cta:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(232,135,30,0.32);}
+  button.cta:active{transform:translateY(0);}
+  button.ghost{
+    appearance:none;cursor:pointer;font-family:inherit;font-weight:600;font-size:14.5px;
+    background:transparent;color:var(--ink-dim);border:1px solid var(--line);
+    padding:11px 20px;border-radius:3px;
+  }
+  button.ghost:hover{color:var(--ink);border-color:var(--steel);}
+
+  /* ---- card shared ---- */
+  .card{
+    border:1px solid var(--line);
+    background:var(--panel);
+    border-radius:4px;
+    padding:26px;
+  }
+
+  /* ---- progress gauge ---- */
+  .gauge-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:13px;color:var(--ink-dim);}
+  .gauge{
+    height:8px;border-radius:99px;background:var(--panel-2);
+    border:1px solid var(--line);
+    overflow:hidden;margin-bottom:26px;
+  }
+  .gauge-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--bad),var(--amber),var(--amber-2));
+    transition:width .35s ease;
+  }
+
+  .cat-label{
+    display:inline-block;font-size:12.5px;color:var(--steel);
+    border:1px solid var(--line);padding:4px 10px;border-radius:3px;margin-bottom:16px;
+  }
+  .qtext{font-size:19px;font-weight:700;margin:0 0 22px;}
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .opt{
+    text-align:right;
+    border:1px solid var(--line);
+    background:var(--panel-2);
+    color:var(--ink);
+    padding:14px 16px;border-radius:3px;
+    font-family:inherit;font-size:15px;cursor:pointer;
+    display:flex;gap:12px;align-items:flex-start;
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .opt:hover:not(.locked){border-color:var(--steel);}
+  .opt .letter{
+    flex:0 0 auto;width:26px;height:26px;border-radius:3px;
+    background:var(--panel);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12.5px;color:var(--ink-dim);font-weight:700;
+  }
+  .opt.correct{border-color:var(--good);background:rgba(62,142,126,0.14);}
+  .opt.correct .letter{background:var(--good);color:#0d1a17;border-color:var(--good);}
+  .opt.wrong{border-color:var(--bad);background:rgba(193,68,14,0.12);}
+  .opt.wrong .letter{background:var(--bad);color:#1a0d06;border-color:var(--bad);}
+  .opt.locked{cursor:default;}
+
+  .explain{
+    margin-top:18px;padding:14px 16px;border-radius:3px;
+    background:var(--panel-2);border:1px solid var(--line);
+    font-size:14px;color:var(--ink-dim);display:none;
+  }
+  .explain.show{display:block;}
+  .qfooter{display:flex;justify-content:flex-end;margin-top:22px;}
+
+  /* ---- results ---- */
+  .score-hero{
+    display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:6px;
+  }
+  .score-num{font-size:64px;font-weight:900;line-height:1;}
+  .score-sub{color:var(--ink-dim);font-size:15px;}
+  .verdict{font-size:15.5px;color:var(--ink-dim);margin:6px 0 30px;max-width:62ch;}
+
+  .breakdown-row{margin-bottom:16px;}
+  .breakdown-top{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;}
+  .breakdown-top .name{font-weight:600;}
+  .breakdown-top .pct{color:var(--ink-dim);}
+  .bar{height:10px;border-radius:99px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;}
+
+  .tips-heading{
+    font-size:13px;color:var(--steel);border-top:1px solid var(--line);
+    margin-top:32px;padding-top:26px;margin-bottom:16px;
+  }
+  .tip-card{
+    border:1px solid var(--line);background:var(--panel-2);
+    border-radius:3px;padding:16px 18px;margin-bottom:12px;
+    display:flex;gap:14px;
+  }
+  .tip-card .badge{
+    flex:0 0 auto;font-size:12px;font-weight:700;color:var(--bad);
+    background:rgba(193,68,14,0.14);border:1px solid rgba(193,68,14,0.4);
+    border-radius:3px;padding:4px 9px;height:fit-content;white-space:nowrap;
+  }
+  .tip-card .txt{font-size:14.5px;}
+  .tip-card .txt b{display:block;margin-bottom:4px;font-size:15px;}
+  .tip-card .txt span{color:var(--ink-dim);}
+
+  .strong-line{font-size:13.5px;color:var(--ink-dim);margin-bottom:24px;}
+
+  .result-actions{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap;}
+
+  .hidden{display:none !important;}
+  footer{text-align:center;color:var(--ink-dim);font-size:12.5px;margin-top:40px;}
+
+  @media (max-width:520px){
+    h1{font-size:24px;}
+    .score-num{font-size:48px;}
+    .hero{padding:28px 20px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= INTRO ================= -->
+  <section id="view-intro">
+    <div class="hero">
+      <span class="eyebrow-plate">شبیه‌سازی آزمون گزینش مدیران</span>
+      <h1>آزمون شبیه‌ساز انتخاب اعضای هیأت‌مدیره در شرکت‌های فولادی</h1>
+      <p class="lead">این ابزار برای آماده‌سازی داوطلبان فراخوان جذب عضو هیأت‌مدیره طراحی شده و حوزه‌های اصلی سنجش دانش مدیریتی، مالی، حقوقی و تخصصی صنعت فولاد را با ۴۰ سؤال چهارگزینه‌ای شبیه‌سازی می‌کند.</p>
+      <div class="chips">
+        <span class="chip">حاکمیت شرکتی</span>
+        <span class="chip">مدیریت راهبردی</span>
+        <span class="chip">مدیریت مالی</span>
+        <span class="chip">صنعت فولاد</span>
+        <span class="chip">منابع انسانی و رهبری</span>
+        <span class="chip">ریسک و کنترل داخلی</span>
+        <span class="chip">قوانین و مقررات</span>
+        <span class="chip">اخلاق حرفه‌ای</span>
+      </div>
+      <div class="meta-row">
+        <div><b>40</b> سؤال</div>
+        <div><b>8</b> حوزه تخصصی</div>
+        <div>بدون محدودیت زمانی</div>
+      </div>
+      <button class="cta" onclick="startQuiz()">شروع آزمون</button>
+    </div>
+    <p style="color:var(--ink-dim);font-size:13px;">این آزمون صرفاً برای خودسنجی و آمادگی داوطلبانه طراحی شده و مستقل از متن رسمی آزمون سامانه انتخاب و انتصاب مدیران است.</p>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section id="view-quiz" class="hidden">
+    <div class="gauge-row">
+      <span id="q-counter">سؤال ۱ از ۴۰</span>
+      <span id="q-score">امتیاز: ۰</span>
+    </div>
+    <div class="gauge"><div class="gauge-fill" id="gauge-fill" style="width:2.5%"></div></div>
+    <div class="card">
+      <span class="cat-label" id="q-cat">—</span>
+      <p class="qtext" id="q-text">—</p>
+      <div class="options" id="q-options"></div>
+      <div class="explain" id="q-explain"></div>
+      <div class="qfooter">
+        <button class="cta hidden" id="btn-next" onclick="nextQuestion()">سؤال بعدی</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESULTS ================= -->
+  <section id="view-results" class="hidden">
+    <div class="hero">
+      <span class="eyebrow-plate">نتیجه آزمون</span>
+      <div class="score-hero">
+        <div class="score-num" id="res-score">0%</div>
+        <div class="score-sub" id="res-count">۰ پاسخ صحیح از ۴۰</div>
+      </div>
+      <p class="verdict" id="res-verdict">—</p>
+    </div>
+
+    <div class="card">
+      <div id="res-breakdown"></div>
+
+      <div class="tips-heading" id="tips-heading-wrap">نکات یادگیری برای نقاط قابل‌بهبود</div>
+      <div id="res-tips"></div>
+    </div>
+
+    <div class="result-actions">
+      <button class="cta" onclick="startQuiz()">آزمون مجدد (سؤالات مخلوط)</button>
+      <button class="ghost" onclick="showIntro()">بازگشت به صفحه اصلی</button>
+    </div>
+  </section>
+
+  <footer>ابزار خودسنجی داخلی · فقط برای آمادگی شخصی</footer>
+</div>
+
+<script>
+const QUESTION_BANK = [
+{cat:"حاکمیت شرکتی", q:"وظیفه اصلی هیأت‌مدیره در نظام حاکمیت شرکتی کدام است؟", options:["اجرای مستقیم عملیات روزمره شرکت","نظارت راهبردی بر عملکرد مدیرعامل و حفظ منافع ذی‌نفعان","تهیه اسناد حسابداری روزانه","استخدام کارکنان سطوح پایین"], correct:1, tip:"هیأت‌مدیره نقش نظارتی و راهبردی دارد، نه اجرایی؛ اجرا برعهدهٔ مدیرعامل و تیم اجرایی است."},
+{cat:"حاکمیت شرکتی", q:"مفهوم «استقلال عضو هیأت‌مدیره» به چه معناست؟", options:["عضو هیچ سهمی از شرکت نداشته باشد","عضو فاقد روابط مالی یا شغلی مؤثری باشد که بی‌طرفی قضاوت او را تحت تأثیر قرار دهد","عضو الزاماً باید مقیم خارج از کشور باشد","عضو نباید در جلسات مجمع شرکت کند"], correct:1, tip:"استقلال یعنی نبود منافع یا وابستگی‌ای که بی‌طرفی تصمیم‌گیری عضو را خدشه‌دار کند."},
+{cat:"حاکمیت شرکتی", q:"کمیته حسابرسی در ساختار حاکمیت شرکتی عمدتاً مسئول چیست؟", options:["تدوین استراتژی بازاریابی","نظارت بر صحت گزارشگری مالی و فرآیند حسابرسی داخلی و مستقل","تعیین حقوق و دستمزد کارکنان","طراحی خط تولید"], correct:1, tip:"کمیته حسابرسی، بازوی نظارتی هیأت‌مدیره بر کیفیت گزارشگری مالی و کنترل‌های داخلی است."},
+{cat:"حاکمیت شرکتی", q:"تفاوت اصلی نقش «مدیرعامل» و «رئیس هیأت‌مدیره» چیست؟", options:["هیچ تفاوتی با هم ندارند","مدیرعامل مسئول ادارهٔ اجرایی روزمره است و رئیس هیأت‌مدیره هدایت جلسات و نظارت راهبردی را برعهده دارد","رئیس هیأت‌مدیره فقط باید سهامدار عمده باشد","مدیرعامل فقط در مجمع عمومی حق رأی دارد"], correct:1, tip:"تفکیک نقش رئیس هیأت‌مدیره از مدیرعامل، یکی از اصول مهم حاکمیت شرکتی سالم است."},
+{cat:"حاکمیت شرکتی", q:"«تضاد منافع» در هیأت‌مدیره زمانی رخ می‌دهد که:", options:["عضو با تصمیم اکثریت مخالف باشد","منافع شخصی عضو با منافع شرکت در تعارض قرار گیرد","عضو در چند جلسه غیبت کند","شرکت سود تقسیم نکند"], correct:1, tip:"افشای به‌موقع تعارض منافع، شرط اول حفظ بی‌طرفی در تصمیم‌گیری هیأت‌مدیره است."},
+
+{cat:"مدیریت راهبردی", q:"تحلیل SWOT به مدیران کمک می‌کند تا:", options:["فقط هزینه‌های شرکت را کاهش دهند","نقاط قوت، ضعف، فرصت‌ها و تهدیدها را برای تدوین استراتژی شناسایی کنند","صرفاً رقبا را از بازار حذف کنند","قیمت آیندهٔ سهام را پیش‌بینی کنند"], correct:1, tip:"SWOT ابزار تحلیل وضعیت داخلی (قوت/ضعف) و بیرونی (فرصت/تهدید) سازمان است."},
+{cat:"مدیریت راهبردی", q:"«چشم‌انداز» (Vision) سازمان بیانگر چیست؟", options:["برنامهٔ عملیاتی یک‌ساله","تصویر آرمانی و بلندمدتی که سازمان می‌خواهد به آن برسد","صورت سود و زیان شرکت","فهرست وظایف روزانهٔ کارکنان"], correct:1, tip:"چشم‌انداز افق بلندمدت سازمان را ترسیم می‌کند؛ آن را با برنامهٔ عملیاتی کوتاه‌مدت اشتباه نگیرید."},
+{cat:"مدیریت راهبردی", q:"در مدل پنج نیروی رقابتی پورتر، کدام مورد جزو نیروهای رقابتی نیست؟", options:["قدرت چانه‌زنی تأمین‌کنندگان","تهدید ورود رقبای جدید","نرخ تورم ملی","قدرت چانه‌زنی خریداران"], correct:2, tip:"مدل پورتر بر پویایی‌های صنعت و رقابت تمرکز دارد، نه متغیرهای کلان اقتصادی مانند تورم."},
+{cat:"مدیریت راهبردی", q:"استراتژی «تمایز» (Differentiation) در مدیریت راهبردی به چه معناست؟", options:["ارائهٔ محصول با کمترین قیمت ممکن در بازار","ارائهٔ محصول یا خدمتی با ویژگی منحصربه‌فرد که ارزش افزوده ایجاد کند","تقلید دقیق از محصولات رقبا","تعطیلی خطوط تولید کم‌بازده"], correct:1, tip:"تمایز در مقابل «رهبری هزینه» قرار می‌گیرد؛ تمرکز آن بر ارزش منحصربه‌فرد است نه قیمت پایین."},
+{cat:"مدیریت راهبردی", q:"نقشهٔ راهبردی در روش کارت امتیازی متوازن (BSC) چه اهدافی را به هم مرتبط می‌کند؟", options:["فقط اهداف مالی","اهداف مالی، مشتری، فرآیندهای داخلی و رشد و یادگیری","فقط اهداف تولیدی","اهداف شخصی مدیرعامل"], correct:1, tip:"BSC عملکرد سازمان را در چهار منظر مرتبط به‌هم می‌سنجد، نه فقط از بعد مالی."},
+
+{cat:"مدیریت مالی", q:"نسبت جاری (Current Ratio) چه چیزی را نشان می‌دهد؟", options:["توان شرکت در پرداخت بدهی‌های بلندمدت","توان شرکت در پرداخت بدهی‌های کوتاه‌مدت از محل دارایی‌های جاری","میزان سودآوری شرکت","ارزش بازار سهام شرکت"], correct:1, tip:"نسبت جاری یک شاخص نقدینگی کوتاه‌مدت است، نه سودآوری یا اهرم مالی."},
+{cat:"مدیریت مالی", q:"EBITDA به چه معناست و چه کاربردی دارد؟", options:["سود خالص پس از کسر مالیات، برای محاسبهٔ سود سهام","سود قبل از بهره، مالیات و استهلاک؛ برای سنجش عملکرد عملیاتی خالص از اثر ساختار مالی","جریان نقدی سرمایه‌گذاری، برای ارزش‌گذاری دارایی ثابت","نرخ بازده داخلی، برای ارزیابی پروژه‌ها"], correct:1, tip:"EBITDA اثر ساختار سرمایه، مالیات و استهلاک را حذف می‌کند تا عملکرد عملیاتی خالص را نشان دهد."},
+{cat:"مدیریت مالی", q:"در صورت جریان وجوه نقد، خرید ماشین‌آلات جدید در کدام بخش ثبت می‌شود؟", options:["فعالیت‌های عملیاتی","فعالیت‌های سرمایه‌گذاری","فعالیت‌های تأمین مالی","درآمدهای متفرقه"], correct:1, tip:"خرید و فروش دارایی‌های ثابت جزو فعالیت‌های سرمایه‌گذاری در صورت جریان وجوه نقد است."},
+{cat:"مدیریت مالی", q:"نسبت بدهی به حقوق صاحبان سهام (Debt to Equity) بالا معمولاً نشان‌دهندهٔ چیست؟", options:["ریسک مالی پایین شرکت","اتکای بیشتر شرکت به تأمین مالی از طریق بدهی و ریسک مالی بالاتر","سودآوری بالای عملیاتی","نقدینگی بالای شرکت"], correct:1, tip:"این نسبت میزان اهرم مالی را می‌سنجد؛ بالا بودن آن معمولاً به معنای ریسک مالی بیشتر است."},
+{cat:"مدیریت مالی", q:"بودجه‌بندی سرمایه‌ای (Capital Budgeting) عمدتاً برای چه تصمیماتی به‌کار می‌رود؟", options:["تعیین حقوق و دستمزد کارکنان","ارزیابی و انتخاب پروژه‌های سرمایه‌گذاری بلندمدت","تعیین قیمت روزانهٔ محصول","تنظیم موجودی انبار"], correct:1, tip:"روش‌هایی مانند NPV و IRR ابزارهای اصلی بودجه‌بندی سرمایه‌ای برای تصمیمات سرمایه‌گذاری بلندمدت‌اند."},
+
+{cat:"صنعت فولاد", q:"کدام‌یک از موارد زیر یکی از روش‌های اصلی تولید فولاد خام است؟", options:["روش کورهٔ قوس الکتریکی (EAF)","روش تقطیر جزء به جزء","روش الکترولیز آب","روش تخمیر زیستی"], correct:0, tip:"دو روش اصلی تولید فولاد خام، مسیر کورهٔ بلند/اکسیژنی (BOF) و کورهٔ قوس الکتریکی (EAF) است."},
+{cat:"صنعت فولاد", q:"مادهٔ اولیهٔ اصلی در روش احیای مستقیم (DRI) برای تولید فولاد چیست؟", options:["قراضهٔ آهن به‌تنهایی","گندله یا کنسانترهٔ سنگ‌آهن","نفت خام","سنگ آهک خالص"], correct:1, tip:"در فرآیند DRI، گندله یا کنسانترهٔ سنگ‌آهن بدون ذوب کامل احیا می‌شود."},
+{cat:"صنعت فولاد", q:"زنجیرهٔ ارزش صنعت فولاد معمولاً با کدام مرحله آغاز می‌شود؟", options:["توزیع محصول نهایی","استخراج و فرآوری سنگ‌آهن","فروش صادراتی","بازیافت قراضه به‌تنهایی"], correct:1, tip:"زنجیرهٔ ارزش فولاد از معدن و فرآوری سنگ‌آهن آغاز و به محصول نهایی ختم می‌شود."},
+{cat:"صنعت فولاد", q:"نوسان قیمت جهانی کدام عامل، تأثیر مستقیم و قابل‌توجهی بر سودآوری شرکت‌های فولادی دارد؟", options:["قیمت سنگ‌آهن و انرژی (گاز و برق)","نرخ بیکاری بخش کشاورزی","قیمت محصولات لبنی","نرخ تورم بخش گردشگری"], correct:0, tip:"سنگ‌آهن و انرژی از مهم‌ترین اقلام هزینهٔ تولید فولاد هستند و نوسان آن‌ها مستقیماً بر حاشیهٔ سود اثر می‌گذارد."},
+{cat:"صنعت فولاد", q:"یکی از چالش‌های زیست‌محیطی مهم صنعت فولاد کدام است؟", options:["مصرف بالای آب شیرین برای کشاورزی","انتشار بالای گازهای گلخانه‌ای، به‌ویژه CO2، در فرآیند تولید","آلودگی صوتی ناشی از تبلیغات","مصرف بالای کاغذ اداری"], correct:1, tip:"کاهش شدت کربن تولید فولاد یکی از موضوعات راهبردی این صنعت در سطح جهانی است."},
+
+{cat:"منابع انسانی و رهبری", q:"رهبری تحول‌آفرین (Transformational Leadership) بر چه چیزی تمرکز دارد؟", options:["کنترل دقیق و تنبیه خطاهای کارکنان","الهام‌بخشی، ایجاد چشم‌انداز مشترک و توانمندسازی کارکنان برای تغییر","اجرای صرف دستورات بالادستی بدون چون‌وچرا","کاهش حقوق برای افزایش انگیزهٔ کاری"], correct:1, tip:"رهبری تحول‌آفرین با ایجاد انگیزهٔ درونی و چشم‌انداز مشترک، تغییر را در سازمان هدایت می‌کند."},
+{cat:"منابع انسانی و رهبری", q:"ارزیابی عملکرد ۳۶۰ درجه به چه معناست؟", options:["ارزیابی فرد فقط توسط مدیر مستقیم او","دریافت بازخورد از منابع مختلف شامل مدیر، همکاران، زیردستان و گاه مشتریان","ارزیابی سالانه فقط بر اساس حضور و غیاب","ارزیابی صرفاً از طریق خودارزیابی فرد"], correct:1, tip:"روش ۳۶۰ درجه با ترکیب دیدگاه‌های چندجانبه، تصویر کامل‌تری از عملکرد فرد ارائه می‌دهد."},
+{cat:"منابع انسانی و رهبری", q:"جانشین‌پروری (Succession Planning) در سطح مدیران ارشد چه هدفی دارد؟", options:["کاهش تعداد کارکنان سازمان","شناسایی و آماده‌سازی از پیش برای پرکردن پست‌های کلیدی در آینده","افزایش ساعات کاری مدیران","تعیین حقوق ثابت برای همهٔ سطوح سازمانی"], correct:1, tip:"جانشین‌پروری ریسک خلأ مدیریتی را کاهش داده و تداوم رهبری سازمان را تضمین می‌کند."},
+{cat:"منابع انسانی و رهبری", q:"کدام مورد از ویژگی‌های یک تیم مدیریتی اثربخش شمرده می‌شود؟", options:["عدم شفافیت در ارتباطات درون‌تیمی","تنوع مهارتی، اعتماد متقابل و مسئولیت‌پذیری مشترک","تمرکز کامل اختیار در دست یک نفر","نبود هدف مشترک بین اعضا"], correct:1, tip:"تنوع مهارتی همراه با اعتماد و مسئولیت‌پذیری مشترک، از ارکان تیم‌های مدیریتی موفق است."},
+{cat:"منابع انسانی و رهبری", q:"مدیریت تعارض سازنده در هیأت‌مدیره چه نتیجه‌ای دارد؟", options:["حذف کامل هرگونه اختلاف‌نظر بین اعضا","بهبود کیفیت تصمیم‌گیری از طریق طرح دیدگاه‌های مختلف با احترام متقابل","افزایش تنش‌های شخصی بین اعضا","کاهش سرعت تصمیم‌گیری بدون هیچ فایده‌ای"], correct:1, tip:"تعارض سازنده، نه حذف اختلاف‌نظر بلکه مدیریت محترمانهٔ آن برای تصمیم‌های بهتر است."},
+
+{cat:"ریسک و کنترل داخلی", q:"چارچوب COSO عمدتاً برای چه هدفی طراحی شده است؟", options:["بازاریابی دیجیتال","مدیریت ریسک بنگاه و کنترل‌های داخلی","طراحی خط تولید فولاد","سیاست‌گذاری ارزی کشور"], correct:1, tip:"COSO یکی از شناخته‌شده‌ترین چارچوب‌های بین‌المللی کنترل داخلی و مدیریت ریسک سازمانی است."},
+{cat:"ریسک و کنترل داخلی", q:"ریسک عملیاتی (Operational Risk) به کدام مورد اشاره دارد؟", options:["ریسک ناشی از نوسان نرخ ارز","ریسک ناشی از نقص فرآیندها، سیستم‌ها، افراد یا رویدادهای بیرونی در جریان عملیات","ریسک ناشی از تغییر قوانین مالیاتی","ریسک ناشی از کاهش تقاضای بازار جهانی"], correct:1, tip:"ریسک عملیاتی معمولاً از داخل فرآیندهای اجرایی سازمان یا رویدادهای غیرمنتظرهٔ بیرونی نشئت می‌گیرد."},
+{cat:"ریسک و کنترل داخلی", q:"کنترل داخلی در یک سازمان عمدتاً برای دستیابی به کدام هدف طراحی می‌شود؟", options:["افزایش صرف سود سهام","اطمینان معقول از قابلیت‌اتکای گزارشگری مالی، رعایت قوانین و اثربخشی عملیات","کاهش تعداد کارکنان سازمان","افزایش قیمت سهام در کوتاه‌مدت"], correct:1, tip:"کنترل داخلی سه هدف اصلی دارد: گزارشگری قابل‌اتکا، رعایت مقررات و کارایی عملیات."},
+{cat:"ریسک و کنترل داخلی", q:"در ماتریس ریسک، ریسکی با احتمال وقوع و شدت اثر بالا چگونه اولویت‌بندی می‌شود؟", options:["نادیده گرفته می‌شود","در اولویت بالا برای اقدام و کنترل فوری قرار می‌گیرد","فقط به‌صورت سالانه پایش می‌شود","به واحد روابط عمومی ارجاع داده می‌شود"], correct:1, tip:"ریسک‌های با احتمال و شدت بالا در ربع بحرانی ماتریس ریسک قرار گرفته و باید اولویت اول اقدام باشند."},
+{cat:"ریسک و کنترل داخلی", q:"حسابرسی داخلی مستقل از مدیریت اجرایی، معمولاً به کدام رکن سازمانی گزارش می‌دهد؟", options:["واحد فروش","کمیتهٔ حسابرسی یا هیأت‌مدیره","واحد انبارداری","واحد روابط عمومی"], correct:1, tip:"استقلال حسابرسی داخلی مستلزم گزارش‌دهی مستقیم به کمیتهٔ حسابرسی یا هیأت‌مدیره است، نه مدیریت اجرایی."},
+
+{cat:"قوانین و مقررات", q:"در شرکت‌های سهامی عام، بالاترین رکن تصمیم‌گیری کدام است؟", options:["مدیرعامل","مجمع عمومی صاحبان سهام","هیأت‌مدیره","بازرس قانونی"], correct:1, tip:"مجمع عمومی صاحبان سهام، بالاترین رکن تصمیم‌گیری در شرکت‌های سهامی است."},
+{cat:"قوانین و مقررات", q:"وظیفهٔ اصلی «بازرس قانونی» (حسابرس مستقل) در شرکت‌های سهامی چیست؟", options:["اجرای تصمیمات هیأت‌مدیره","اظهارنظر مستقل دربارهٔ صحت صورت‌های مالی و رعایت مقررات","تعیین استراتژی بازاریابی شرکت","استخدام مدیران ارشد"], correct:1, tip:"بازرس قانونی نهادی مستقل از مدیریت است که بر صحت گزارشگری مالی نظارت می‌کند."},
+{cat:"قوانین و مقررات", q:"اصل «تفکیک مالکیت از مدیریت» در شرکت‌های سهامی عام به چه معناست؟", options:["سهامداران باید همیشه مدیرعامل شرکت باشند","ادارهٔ شرکت به مدیران حرفه‌ای سپرده می‌شود در حالی که مالکیت نزد سهامداران باقی می‌ماند","مدیران شرکت نمی‌توانند سهامدار باشند","این اصل فقط در شرکت‌های خصوصی کوچک کاربرد دارد"], correct:1, tip:"این تفکیک، پایهٔ نیاز به حاکمیت شرکتی و نظارت هیأت‌مدیره بر مدیریت حرفه‌ای است."},
+{cat:"قوانین و مقررات", q:"طبق قانون تجارت ایران، حداقل تعداد اعضای هیأت‌مدیرهٔ شرکت سهامی عام چند نفر است؟", options:["یک نفر","پنج نفر","دو نفر","ده نفر"], correct:1, tip:"طبق قانون تجارت، هیأت‌مدیرهٔ شرکت سهامی عام باید حداقل ۵ عضو داشته باشد."},
+{cat:"قوانین و مقررات", q:"خصوصی‌سازی شرکت‌های دولتی معمولاً با کدام هدف اصلی انجام می‌شود؟", options:["افزایش دخالت مستقیم دولت در قیمت‌گذاری","افزایش کارایی، رقابت‌پذیری و کاهش تصدی‌گری دولت","حذف کامل بازار سرمایه","افزایش تعداد کارکنان دولتی"], correct:1, tip:"هدف اصلی خصوصی‌سازی، بهبود کارایی اقتصادی و کاهش تصدی‌گری دولت در بنگاه‌داری است."},
+
+{cat:"اخلاق حرفه‌ای و تصمیم‌گیری", q:"اصل «شفافیت» (Transparency) در حاکمیت شرکتی به چه معناست؟", options:["پنهان‌کاری اطلاعات حساس برای حفظ منافع رقابتی","افشای به‌موقع و دقیق اطلاعات باا‌همیت برای ذی‌نفعان","انتشار فقط اخبار مثبت شرکت","محدود کردن اطلاعات فقط به سهامداران عمده"], correct:1, tip:"شفافیت یعنی دسترسی عادلانه و به‌موقع همهٔ ذی‌نفعان به اطلاعات بااهمیت، نه فقط اخبار مثبت."},
+{cat:"اخلاق حرفه‌ای و تصمیم‌گیری", q:"در مواجهه با تصمیمی که منافع کوتاه‌مدت سهامداران را با منافع بلندمدت شرکت در تضاد قرار می‌دهد، رویکرد مسئولانهٔ هیأت‌مدیره کدام است؟", options:["همیشه اولویت با سود کوتاه‌مدت است","بررسی متوازن پیامدهای بلندمدت و کوتاه‌مدت با در نظر گرفتن منافع پایدار شرکت و ذی‌نفعان","واگذاری تصمیم به رسانه‌ها","تعویق نامحدود تصمیم‌گیری"], correct:1, tip:"وظیفهٔ مراقبت هیأت‌مدیره ایجاب می‌کند منافع بلندمدت شرکت در کنار انتظارات کوتاه‌مدت سنجیده شود."},
+{cat:"اخلاق حرفه‌ای و تصمیم‌گیری", q:"«پاسخگویی» (Accountability) در حاکمیت شرکتی یعنی:", options:["مدیران فقط باید در برابر دولت پاسخگو باشند","مدیران و اعضای هیأت‌مدیره باید نسبت به تصمیمات خود در برابر ذی‌نفعان پاسخگو باشند","پاسخگویی فقط در پایان دورهٔ مدیریت لازم است","پاسخگویی مختص شرکت‌های کوچک است"], correct:1, tip:"پاسخگویی یک الزام مستمر در برابر همهٔ ذی‌نفعان است، نه صرفاً در پایان دورهٔ مدیریت."},
+{cat:"اخلاق حرفه‌ای و تصمیم‌گیری", q:"«وظیفهٔ مراقبت» (Duty of Care) به‌عنوان یک الزام اخلاقی در تصمیم‌گیری هیأت‌مدیره یعنی:", options:["عدم شرکت در جلسات غیرضروری","تصمیم‌گیری آگاهانه، مبتنی بر اطلاعات کافی و با دقت معقول","حفظ اسرار شخصی سایر اعضا","پرهیز از هرگونه تصمیم‌گیری"], correct:1, tip:"وظیفهٔ مراقبت به معنای بررسی دقیق اطلاعات پیش از تصمیم‌گیری است، نه اجتناب از تصمیم."},
+{cat:"اخلاق حرفه‌ای و تصمیم‌گیری", q:"افشای به‌موقع تعارض منافع توسط عضو هیأت‌مدیره چه نقشی دارد؟", options:["هیچ تأثیری بر تصمیمات ندارد","به حفظ بی‌طرفی و اعتماد در فرآیند تصمیم‌گیری کمک می‌کند","باعث تأخیر غیرضروری در همهٔ جلسات می‌شود","فقط یک الزام تشریفاتی بی‌اهمیت است"], correct:1, tip:"افشای شفاف تعارض منافع، سنگ‌بنای اعتماد ذی‌نفعان به فرآیند تصمیم‌گیری هیأت‌مدیره است."},
+];
+
+const CATEGORY_TIPS = {
+  "حاکمیت شرکتی": "بر تفاوت نقش نظارتی هیأت‌مدیره با نقش اجرایی مدیرعامل، و مفاهیم استقلال عضو و تضاد منافع مسلط شوید.",
+  "مدیریت راهبردی": "ابزارهای اصلی تحلیل راهبردی مانند SWOT، مدل پنج نیروی پورتر و کارت امتیازی متوازن (BSC) را مرور کنید.",
+  "مدیریت مالی": "نسبت‌های مالی کلیدی (نقدینگی، اهرمی، سودآوری) و اجزای صورت‌های مالی اساسی را تمرین کنید.",
+  "صنعت فولاد": "زنجیرهٔ ارزش فولاد از سنگ‌آهن تا محصول نهایی و روش‌های تولید (BOF، EAF، DRI) را مرور کنید.",
+  "منابع انسانی و رهبری": "مفاهیم رهبری تحول‌آفرین، جانشین‌پروری و ویژگی‌های تیم مدیریتی اثربخش را مطالعه کنید.",
+  "ریسک و کنترل داخلی": "چارچوب COSO، انواع ریسک سازمانی و جایگاه مستقل حسابرسی داخلی را مرور کنید.",
+  "قوانین و مقررات": "ارکان شرکت سهامی عام طبق قانون تجارت (مجمع، هیأت‌مدیره، بازرس قانونی) را مرور کنید.",
+  "اخلاق حرفه‌ای و تصمیم‌گیری": "اصول شفافیت، پاسخگویی و وظیفهٔ مراقبت در تصمیم‌گیری‌های هیأت‌مدیره را مرور کنید.",
+};
+
+const LETTERS = ["الف","ب","ج","د"];
+
+let quizOrder = [];
+let current = 0;
+let score = 0;
+let answered = false;
+let perCategory = {}; // cat -> {correct, total}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function showView(id){
+  ["view-intro","view-quiz","view-results"].forEach(v=>{
+    document.getElementById(v).classList.toggle("hidden", v!==id);
+  });
+}
+
+function showIntro(){ showView("view-intro"); window.scrollTo(0,0); }
+
+function startQuiz(){
+  // build shuffled question list with shuffled options
+  quizOrder = shuffle(QUESTION_BANK).map(item=>{
+    const idxs = shuffle([0,1,2,3]);
+    const options = idxs.map(i=>item.options[i]);
+    const correct = idxs.indexOf(item.correct);
+    return {cat:item.cat, q:item.q, options, correct, tip:item.tip};
+  });
+  current = 0; score = 0; answered = false;
+  perCategory = {};
+  Object.keys(CATEGORY_TIPS).forEach(c=>perCategory[c]={correct:0,total:0});
+  showView("view-quiz");
+  renderQuestion();
+  window.scrollTo(0,0);
+}
+
+function renderQuestion(){
+  answered = false;
+  const item = quizOrder[current];
+  document.getElementById("q-counter").textContent = `سؤال ${toFa(current+1)} از ${toFa(quizOrder.length)}`;
+  document.getElementById("q-score").textContent = `امتیاز: ${toFa(score)}`;
+  document.getElementById("gauge-fill").style.width = (((current)/quizOrder.length)*100)+"%";
+  document.getElementById("q-cat").textContent = item.cat;
+  document.getElementById("q-text").textContent = item.q;
+  document.getElementById("btn-next").classList.add("hidden");
+  const explain = document.getElementById("q-explain");
+  explain.classList.remove("show");
+  explain.textContent = "";
+
+  const wrap = document.getElementById("q-options");
+  wrap.innerHTML = "";
+  item.options.forEach((opt, i)=>{
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.innerHTML = `<span class="letter">${LETTERS[i]}</span><span>${opt}</span>`;
+    btn.onclick = ()=>selectOption(i);
+    wrap.appendChild(btn);
+  });
+}
+
+function selectOption(i){
+  if(answered) return;
+  answered = true;
+  const item = quizOrder[current];
+  perCategory[item.cat].total++;
+  const opts = document.querySelectorAll("#q-options .opt");
+  opts.forEach((el,idx)=>{
+    el.classList.add("locked");
+    if(idx===item.correct) el.classList.add("correct");
+    if(idx===i && i!==item.correct) el.classList.add("wrong");
+  });
+  if(i===item.correct){
+    score++;
+    perCategory[item.cat].correct++;
+  }
+  const explain = document.getElementById("q-explain");
+  explain.textContent = (i===item.correct ? "درست است. " : "پاسخ درست مشخص شد. ") + item.tip;
+  explain.classList.add("show");
+  document.getElementById("q-score").textContent = `امتیاز: ${toFa(score)}`;
+  document.getElementById("btn-next").classList.remove("hidden");
+  document.getElementById("btn-next").textContent = (current===quizOrder.length-1) ? "مشاهدهٔ نتیجه" : "سؤال بعدی";
+}
+
+function nextQuestion(){
+  current++;
+  if(current>=quizOrder.length){
+    showResults();
+  } else {
+    renderQuestion();
+    window.scrollTo(0,0);
+  }
+}
+
+function toFa(n){
+  const digits = ["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
+  return String(n).split("").map(ch=> (ch>='0'&&ch<='9') ? digits[ch] : ch).join("");
+}
+
+function showResults(){
+  const pct = Math.round((score/quizOrder.length)*100);
+  document.getElementById("res-score").textContent = toFa(pct)+"٪";
+  document.getElementById("res-count").textContent = `${toFa(score)} پاسخ صحیح از ${toFa(quizOrder.length)}`;
+
+  let verdict;
+  if(pct>=85) verdict = "آمادگی شما در سطح بسیار خوبی قرار دارد. مرور نهایی حوزه‌های ضعیف‌تر می‌تواند نتیجه را تثبیت کند.";
+  else if(pct>=65) verdict = "آمادگی شما در سطح قابل‌قبولی است؛ با تمرکز روی نکات زیر می‌توانید نتیجه را ارتقا دهید.";
+  else verdict = "برای رسیدن به آمادگی مطلوب، مرور هدفمند حوزه‌های زیر پیشنهاد می‌شود.";
+  document.getElementById("res-verdict").textContent = verdict;
+
+  // breakdown
+  const bdWrap = document.getElementById("res-breakdown");
+  bdWrap.innerHTML = "";
+  const cats = Object.keys(perCategory);
+  const weak = [];
+  cats.forEach(cat=>{
+    const {correct,total} = perCategory[cat];
+    const p = total ? Math.round((correct/total)*100) : 0;
+    if(p<60) weak.push({cat,p});
+    const row = document.createElement("div");
+    row.className = "breakdown-row";
+    const color = p>=75 ? "var(--good)" : (p>=50 ? "var(--amber)" : "var(--bad)");
+    row.innerHTML = `
+      <div class="breakdown-top"><span class="name">${cat}</span><span class="pct">${toFa(correct)}/${toFa(total)} · ${toFa(p)}٪</span></div>
+      <div class="bar"><div class="bar-fill" style="width:${p}%;background:${color}"></div></div>
+    `;
+    bdWrap.appendChild(row);
+  });
+
+  // tips
+  const tipsWrap = document.getElementById("res-tips");
+  const headingWrap = document.getElementById("tips-heading-wrap");
+  tipsWrap.innerHTML = "";
+  if(weak.length===0){
+    headingWrap.textContent = "جمع‌بندی";
+    const p = document.createElement("p");
+    p.className = "strong-line";
+    p.textContent = "در همهٔ حوزه‌ها عملکرد قابل‌قبول یا خوبی داشتید. نکته‌ای خاص برای مرور فوری وجود ندارد.";
+    tipsWrap.appendChild(p);
+  } else {
+    headingWrap.textContent = "نکات یادگیری برای نقاط قابل‌بهبود";
+    weak.sort((a,b)=>a.p-b.p).forEach(w=>{
+      const card = document.createElement("div");
+      card.className = "tip-card";
+      card.innerHTML = `<span class="badge">${toFa(w.p)}٪</span><div class="txt"><b>${w.cat}</b><span>${CATEGORY_TIPS[w.cat]}</span></div>`;
+      tipsWrap.appendChild(card);
+    });
+  }
+
+  showView("view-results");
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
